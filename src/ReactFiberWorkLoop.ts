@@ -12,8 +12,16 @@ import {
   HostComponent,
   HostText,
 } from './ReactWorkTags';
+import { Placement } from './utils';
 
 let wip: any = null; // work in progress 当前正在工作中的
+let wipRoot: any = null;
+
+// 初次渲染和更新
+export function scheduleUpdateOnFiber(fiber: any) {
+  wip = fiber;
+  wipRoot = fiber;
+}
 
 function performUnitOfWork() {
   const { tag } = wip;
@@ -58,4 +66,40 @@ function performUnitOfWork() {
   }
 
   wip = null;
+}
+
+function workLoop(IdleDeadline: any) {
+  while (wip && IdleDeadline.timeRemaining() > 0) {
+    performUnitOfWork();
+  }
+
+  if (!wip && wipRoot) {
+    commitRoot();
+  }
+}
+
+requestIdleCallback(workLoop);
+
+function commitRoot() {
+  commitWorker(wipRoot);
+  wipRoot = null;
+}
+
+function commitWorker(wip: any) {
+  if (!wip) {
+    return;
+  }
+  // 1. 更新自己
+
+  const { flags, stateNode } = wip;
+
+  let parentNode = wip.return.stateNode;
+  if (flags && Placement && stateNode) {
+    parentNode.appendChild(stateNode);
+  }
+
+  // 2. 更新子节点
+  commitWorker(wip.child);
+  // 2. 更新兄弟节点
+  commitWorker(wip.sibling);
 }
