@@ -2,7 +2,9 @@ import { createFiber } from './ReactFiber';
 import { isArray, isStringOrNumber, updateNode } from './utils';
 
 // 原生标签
-export function updateHostComponent(wip) {
+export function updateHostComponent(wip: any) {
+  // console.log('test host component wip', wip, new Date().valueOf());
+
   if (!wip.stateNode) {
     wip.stateNode = document.createElement(wip.type);
     // 属性
@@ -10,21 +12,42 @@ export function updateHostComponent(wip) {
   }
   // 子节点
   reconcileChildren(wip, wip.props.children);
-
-  console.log('test wip', wip);
 }
 
 // 函数组件
-export function updateFunctionComponent(wip) {}
+export function updateFunctionComponent(wip: any) {
+  // console.log('test function component wip', wip, new Date().valueOf());
+
+  const { type, props } = wip;
+
+  const children = type(props);
+
+  reconcileChildren(wip, children);
+}
 
 // 类组件
-export function updateClassComponent(wip) {}
+export function updateClassComponent(wip: any) {
+  // console.log('test class component wip', wip, new Date().valueOf());
 
-// fragement
-export function updateFragmentComponent(wip) {}
+  const { type, props } = wip;
+
+  const instance = new type(props);
+  const children = instance.render();
+
+  reconcileChildren(wip, children);
+}
+
+// Fragement
+export function updateFragmentComponent(wip: any) {
+  // console.log('test fragment component wip', wip, new Date().valueOf());
+  reconcileChildren(wip, wip.props.children);
+}
 
 // 文本
-export function updateHostTextComponent(wip) {}
+export function updateHostTextComponent(wip: any) {
+  // console.log('test host text component wip', wip, new Date().valueOf());
+  wip.stateNode = document.createTextNode(wip.props.children);
+}
 
 function reconcileChildren(wip: any, children: any) {
   if (isStringOrNumber(children)) {

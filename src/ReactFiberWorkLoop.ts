@@ -39,12 +39,15 @@ function performUnitOfWork() {
     case ClassComponent:
       updateClassComponent(wip);
       break;
+
     case Fragment:
       updateFragmentComponent(wip);
       break;
+
     case HostText:
       updateHostTextComponent(wip);
       break;
+
     default:
       break;
   }
@@ -93,7 +96,7 @@ function commitWorker(wip: any) {
 
   const { flags, stateNode } = wip;
 
-  let parentNode = wip.return.stateNode;
+  const parentNode = getParentNode(wip.return);
   if (flags && Placement && stateNode) {
     parentNode.appendChild(stateNode);
   }
@@ -102,4 +105,15 @@ function commitWorker(wip: any) {
   commitWorker(wip.child);
   // 2. 更新兄弟节点
   commitWorker(wip.sibling);
+}
+
+function getParentNode(wip: any) {
+  // console.log('test parent wip', wip);
+  let tem = wip;
+  while (tem) {
+    if (tem.stateNode) {
+      return tem.stateNode;
+    }
+    tem = tem.return;
+  }
 }

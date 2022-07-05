@@ -1,7 +1,7 @@
 import { createFiber } from './ReactFiber';
 import { scheduleUpdateOnFiber } from './ReactFiberWorkLoop';
 
-function ReactDOMRoot(internalRoot: { containerInfo: any }) {
+function ReactDOMRoot(this: any, internalRoot: { containerInfo: any }) {
   this._internalRoot = internalRoot;
 }
 
@@ -24,7 +24,7 @@ function updateContainer(element: any, container: { containerInfo: any }) {
 function createRoot(container: any) {
   const root = { containerInfo: container };
 
-  return new ReactDOMRoot(root);
+  return new (ReactDOMRoot as any)(root);
 }
 
 export default { createRoot };

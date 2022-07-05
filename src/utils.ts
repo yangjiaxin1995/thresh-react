@@ -16,29 +16,29 @@ export const HookPassive = /*   */ 0b100;
 
 //*******************************************************************************************
 
-export function isStr(s) {
+export function isStr(s: any) {
   return typeof s === 'string';
 }
 
-export function isStringOrNumber(s) {
+export function isStringOrNumber(s: any) {
   return typeof s === 'string' || typeof s === 'number';
 }
 
-export function isFn(fn) {
+export function isFn(fn: any) {
   return typeof fn === 'function';
 }
 
-export function isArray(arr) {
+export function isArray(arr: any) {
   return Array.isArray(arr);
 }
 
-export function isUndefined(s) {
+export function isUndefined(s: undefined) {
   return s === undefined;
 }
 
 // old props {className: 'red', id: '_id'}
 // new props {className: 'green'}
-export function updateNode(node, prevVal, nextVal) {
+export function updateNode(node: any, prevVal: any, nextVal: any) {
   Object.keys(prevVal)
     // .filter(k => k !== "children")
     .forEach((k) => {
@@ -74,7 +74,7 @@ export function updateNode(node, prevVal, nextVal) {
     });
 }
 
-export function areHookInputsEqual(nextDeps, prevDeps) {
+export function areHookInputsEqual(nextDeps: any, prevDeps: any) {
   if (prevDeps == null) {
     return false;
   }
