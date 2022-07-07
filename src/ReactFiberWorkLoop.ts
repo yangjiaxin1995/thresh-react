@@ -100,13 +100,13 @@ function commitWorker(wip: any) {
   const { flags, stateNode } = wip;
 
   const parentNode = getParentNode(wip.return);
-  if (flags && Placement && stateNode) {
+  if (flags & Placement && stateNode) {
     parentNode.appendChild(stateNode);
   }
 
   if (flags & Update && stateNode) {
     // 更新属性
-    updateNode(stateNode, wip.alternate.props, wip.props);
+    updateNode(stateNode, wip.alternate?.props, wip?.props);
   }
 
   // 2. 更新子节点

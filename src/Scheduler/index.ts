@@ -1,9 +1,9 @@
 import { peek, pop, push } from './minHeap';
 
-let taskQueue = [];
+let taskQueue: any[] = [];
 let taskIdCounter = 1;
 
-export function scheduleCallback(callback) {
+export function scheduleCallback(callback: any) {
   const currentTime = getCurrntTime();
 
   const timeout = -1;

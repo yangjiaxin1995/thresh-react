@@ -19,7 +19,7 @@ export function updateHostComponent(wip: any) {
 export function updateFunctionComponent(wip: any) {
   // console.log('test function component wip', wip, new Date().valueOf());
   renderWithHooks(wip);
-  
+
   const { type, props } = wip;
 
   const children = type(props);

@@ -12,8 +12,8 @@ function FunctionComponent(props: any) {
   return (
     <div className="border">
       <p>{props.name}</p>
-      <button onClick={() => setCount()}>useReducer:{count}</button>
-      <button onClick={() => setCount2(count2 + 1)}>useState:{count2}</button>
+      <button onClick={() => setCount()}>{count}</button>
+      <button onClick={() => setCount2(count2 + 1)}>{count2}</button>
     </div>
   );
 }

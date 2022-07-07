@@ -12,7 +12,7 @@ export function renderWithHooks(wip: any) {
 function updateWorkInProgressHook() {
   let hook;
 
-  const current = currentlyRenderingFiber?.alternate;
+  const current = currentlyRenderingFiber.alternate;
   if (current) {
     // 组件更新
     currentlyRenderingFiber.memorizedState = current.memorizedState;
@@ -32,9 +32,7 @@ function updateWorkInProgressHook() {
       workInProgressHook = workInProgressHook.next = hook;
     } else {
       // hook0
-      if (currentlyRenderingFiber?.memorizedState) {
-        workInProgressHook = currentlyRenderingFiber.memorizedState = hook;
-      }
+      workInProgressHook = currentlyRenderingFiber.memorizedState = hook;
     }
   }
 
@@ -44,7 +42,7 @@ function updateWorkInProgressHook() {
 export function useReducer(reducer: any, initalState: any) {
   const hook = updateWorkInProgressHook();
 
-  if (!currentlyRenderingFiber?.alternate) {
+  if (!currentlyRenderingFiber.alternate) {
     // 初次渲染
     hook.memorizedState = initalState;
   }
@@ -79,16 +77,10 @@ function dispatchReducerAction(
   reducer: any,
   action: any
 ) {
-  console.log('test fiber', fiber);
-  if (fiber) {
-    if (hook.memorizedState) {
-      hook.memorizedState = reducer ? reducer(hook.memorizedState) : action;
-    }
-
-    fiber.alternate = { ...fiber };
-    fiber.sibling = null;
-    scheduleUpdateOnFiber(fiber);
-  }
+  hook.memorizedState = reducer ? reducer(hook.memorizedState) : action;
+  fiber.alternate = { ...fiber };
+  fiber.sibling = null;
+  scheduleUpdateOnFiber(fiber);
 }
 
 export function useState(initalState: any) {
