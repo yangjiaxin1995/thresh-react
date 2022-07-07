@@ -1,14 +1,19 @@
 // import React from "react";
 // import ReactDOM from "react-dom";
 // import {  useReducer } from "react";
-import { ReactDOM, Component } from '../which-react';
+import { ReactDOM, Component, useReducer, useState } from '../which-react';
 
 import './index.css';
 
-function FunctionComponent(props:any) {
+function FunctionComponent(props: any) {
+  const [count, setCount] = useReducer((x: number) => x + 1, 0);
+  const [count2, setCount2] = useState(1);
+
   return (
     <div className="border">
       <p>{props.name}</p>
+      <button onClick={() => setCount()}>useReducer:{count}</button>
+      <button onClick={() => setCount2(count2 + 1)}>useState:{count2}</button>
     </div>
   );
 }
