@@ -4,21 +4,23 @@ import { isArray, isStringOrNumber, Update } from './utils';
 // 协调（diff）
 // abc
 // bc
-export function reconcileChildren(wip: any, children: any) {
+export function reconcileChildren(returnFiber: any, children: any) {
   if (isStringOrNumber(children)) {
     return;
   }
 
   const newChildren = isArray(children) ? children : [children];
+  const newChildrenLen = newChildren.length;
   // oldfiber的头结点
-  let oldFiber = wip.alternate?.child;
+  let oldFiber = returnFiber.alternate?.child;
   let previousNewFiber: any = null;
-  for (let i = 0; i < newChildren.length; i++) {
-    const newChild = newChildren[i];
+  let newIndex = 0;
+  for (newIndex = 0; newIndex < newChildrenLen; newIndex++) {
+    const newChild = newChildren[newIndex];
     if (newChild == null) {
       continue;
     }
-    const newFiber = createFiber(newChild, wip);
+    const newFiber = createFiber(newChild, returnFiber);
     const same = sameNode(newFiber, oldFiber);
 
     if (same) {
@@ -30,7 +32,7 @@ export function reconcileChildren(wip: any, children: any) {
     }
 
     if (!same && oldFiber) {
-      deleteChild(wip, oldFiber);
+      deleteChild(returnFiber, oldFiber);
     }
 
     if (oldFiber) {
@@ -39,12 +41,17 @@ export function reconcileChildren(wip: any, children: any) {
 
     if (previousNewFiber === null) {
       // head node
-      wip.child = newFiber;
+      returnFiber.child = newFiber;
     } else {
       previousNewFiber.sibling = newFiber;
     }
 
     previousNewFiber = newFiber;
+  }
+
+  if (newIndex === newChildren.length) {
+    deleteRemainingChildren(returnFiber, oldFiber);
+    return;
   }
 }
 
@@ -61,5 +68,14 @@ function deleteChild(returnFiber: any, childToDelete: any) {
     returnFiber.deletions.push(childToDelete);
   } else {
     returnFiber.deletions = [childToDelete];
+  }
+}
+
+// 删除多个节点
+function deleteRemainingChildren(returnFiber: any, currentFirstChild: any) {
+  let childToDelete = currentFirstChild;
+  while (childToDelete) {
+    deleteChild(returnFiber, childToDelete);
+    childToDelete = childToDelete.sibling;
   }
 }
