@@ -51,6 +51,17 @@ export function updateHostTextComponent(wip: any) {
   wip.stateNode = document.createTextNode(wip.props.children);
 }
 
+// 删除单个节点
+function deleteChild(returnFiber: any, childToDelete: any) {
+  // returnFiber.deletoins = [...]
+  const deletions = returnFiber.deletions;
+  if (deletions) {
+    returnFiber.deletions.push(childToDelete);
+  } else {
+    returnFiber.deletions = [childToDelete];
+  }
+}
+
 // 协调（diff）
 // abc
 // bc
@@ -77,6 +88,10 @@ function reconcileChildren(wip: any, children: any) {
         alternate: oldFiber,
         flags: Update,
       });
+    }
+
+    if (!same && oldFiber) {
+      deleteChild(wip, oldFiber);
     }
 
     if (oldFiber) {

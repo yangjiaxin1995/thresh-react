@@ -14,6 +14,8 @@ function FunctionComponent(props: any) {
       <p>{props.name}</p>
       <button onClick={() => setCount()}>{count}</button>
       <button onClick={() => setCount2(count2 + 1)}>{count2}</button>
+
+      {count % 2 ? <div>thresh</div> : <p>jinx</p>}
     </div>
   );
 }
