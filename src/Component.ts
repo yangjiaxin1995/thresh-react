@@ -1,4 +1,4 @@
-export default function Component(this: any, props: any) {
+export default function Component(props: any) {
   this.props = props;
 }
 

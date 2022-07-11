@@ -59,7 +59,7 @@ function FunctionComponent(props: any) {
   );
 }
 
-class ClassComponent extends Component {
+class ClassComponent extends (Component as any) {
   render() {
     return (
       <div className="border">
